@@ -26,10 +26,12 @@ export const expenseSlice = createSlice({
     name: 'expense',
     initialState,
     reducers: {
-        addExpenseToHistory: (state, { payload: { expenseName, amount } }: PayloadAction<IExpense>) => {
+        addExpenseToHistory: (state, { payload  }: PayloadAction<IExpense>) => {
+           const { expenseName, amount } = payload;
+           
             const parsedAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
 
-            state.expenseHistory.push({ expenseName, amount: parsedAmount });
+            state.expenseHistory.push({ expenseName: expenseName, amount: parsedAmount });
         },
         calculateBalance: (state) => {
             state.balance = state.expenseHistory.reduce((total, expense) => total + expense.amount, 0);

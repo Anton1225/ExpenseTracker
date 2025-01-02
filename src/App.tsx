@@ -9,7 +9,7 @@ import TransactionForm from './components/TransactionForm'
 function App(): JSX.Element {
 
   return (
-    <Container>
+    <Container className='d-flex flex-column align-items-center mt-5 card shadow rounded p-3' style={{maxWidth: "500px"}}>
       <Balance />
       <IncomeAndExpanse/>
       <ExpanseHistory/>
