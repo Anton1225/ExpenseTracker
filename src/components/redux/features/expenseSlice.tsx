@@ -22,35 +22,32 @@ const initialState: ExpenseState = {
     expenseHistory: []
 }
 
-interface AddExpensePayload {
-    expenseName: string
-    amount: number | string
-}
-
 export const expenseSlice = createSlice({
     name: 'expense',
     initialState,
     reducers: {
-        addExpenseToHistory: (state, action: PayloadAction<AddExpensePayload>) => {
-            const { expenseName, amount } = action.payload;
-            // Convert amount to number if it is a string
+        addExpenseToHistory: (state, { payload: { expenseName, amount } }: PayloadAction<IExpense>) => {
             const parsedAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
 
-            // Update the state
-            state.expensee += parsedAmount;
-            state.balance -= parsedAmount;
-
-            // Add the expense to the history
             state.expenseHistory.push({ expenseName, amount: parsedAmount });
         },
-        calculateBalance: (state, action: PayloadAction<AddExpensePayload>) => {
+        calculateBalance: (state) => {
             state.balance = state.expenseHistory.reduce((total, expense) => total + expense.amount, 0);
         },
-
-        calculateIncome: (state, action: PayloadAction<AddExpensePayload>) => {
-            state.income = state.expenseHistory.reduce((total, expense) => {if(expense.amount > 0) {return Math.abs( total + expense.amount)}; return total}, 0);      
-    }, 
-    calculateExpense: (state, action: PayloadAction<AddExpensePayload>) => {
-        state.expense = state.expenseHistory.reduce((total, expense) => {if(expense.amount < 0) {return Math.abs( total + expense.amount)}; return total}, 0);
+        calculateIncome: (state) => {
+            state.income = state.expenseHistory.reduce((total, expense) => expense.amount > 0 ? total + Math.abs(expense.amount) : total, 0);
+        },
+        calculateExpense: (state) => {
+            state.expense = state.expenseHistory.reduce((total, expense) => expense.amount < 0 ? total + Math.abs(expense.amount) : total, 0);
+        }
     }
 })
+
+export const {
+    addExpenseToHistory,
+    calculateBalance,
+    calculateIncome,
+    calculateExpense    
+} = expenseSlice.actions
+
+export default expenseSlice.reducer

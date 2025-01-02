@@ -1,9 +1,9 @@
-import React from 'react';
+//import React from 'react';
 
 function TransactionForm(props) {
     return (
         <div>
-            
+            Transaction Form
         </div>
     );
 }
